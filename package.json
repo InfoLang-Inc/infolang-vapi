@@ -1,0 +1,74 @@
+{
+  "name": "infolang-vapi",
+  "version": "0.1.0",
+  "description": "InfoLang semantic memory for Vapi voice agents: a Cloudflare Workers-deployable webhook that recalls caller context at call start and remembers the transcript at call end.",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "InfoLang",
+    "email": "engineering@infolang.ai"
+  },
+  "homepage": "https://github.com/InfoLang-Inc/infolang-vapi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InfoLang-Inc/infolang-vapi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/InfoLang-Inc/infolang-vapi/issues"
+  },
+  "keywords": [
+    "vapi",
+    "voice",
+    "webhook",
+    "cloudflare-workers",
+    "infolang",
+    "semantic-memory",
+    "memory",
+    "rag"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./worker": {
+      "types": "./dist/worker.d.ts",
+      "import": "./dist/worker.js",
+      "require": "./dist/worker.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "deploy": "npx wrangler deploy"
+  },
+  "dependencies": {
+    "@infolang/sdk": "^0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "eslint": "^9.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.1.0"
+  }
+}
