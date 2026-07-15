@@ -1,0 +1,52 @@
+name: publish
+
+# Publish to npm on a pushed semver tag (v*) or a published GitHub Release.
+#
+# Requires the repository secret NPM_TOKEN (an npm automation / granular access
+# token with publish rights). If it is absent the workflow no-ops (skips)
+# instead of failing, so an unconfigured repository never produces a red build.
+on:
+  push:
+    tags:
+      - "v*"
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.decide.outputs.publish }}
+    steps:
+      - id: decide
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "${NPM_TOKEN}" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "NPM_TOKEN detected -> will publish."
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::NPM_TOKEN secret not configured; skipping npm publish."
+          fi
+
+  publish:
+    needs: guard
+    if: needs.guard.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm run build
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
