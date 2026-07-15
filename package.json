@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "InfoLang semantic memory for Vapi voice agents: a Cloudflare Workers-deployable webhook that recalls caller context at call start and remembers the transcript at call end.",
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "author": {
     "name": "InfoLang",
     "email": "engineering@infolang.ai"
